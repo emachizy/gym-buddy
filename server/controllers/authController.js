@@ -3,10 +3,14 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import userModel from "../models/userModel.js";
 import transporter from "../config/nodemailer.js";
+import {
+  EMAIL_VERIFY_TEMPLATE,
+  PASSWORD_RESET_TEMPLATE,
+} from "../config/emailTemplates.js";
 
 export const register = async (req, res) => {
   console.log("Request Body:", req.body);
-  const { name, email, password, username } = req.body;
+  const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
     return res.json({ success: false, message: "All fields are required" });
@@ -24,7 +28,6 @@ export const register = async (req, res) => {
     const user = new userModel({
       name,
       email,
-      username: username || null,
       password: hashedPassword,
     });
     await user.save();
@@ -111,6 +114,165 @@ export const logout = async (req, res) => {
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
     });
     return res.json({ success: true, message: "Logged out" });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+// Generate OTP
+export const sendVerifyOtp = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    const user = await userModel.findById(userId);
+
+    if (user.isVerified) {
+      return res.json({ success: false, message: "User is already verified" });
+    }
+
+    const otp = String(Math.floor(100000 + Math.random() * 900000));
+
+    user.verifyOtp = otp;
+    user.verifyOtpExpiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes
+    await user.save();
+
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: user.email,
+      subject: "Verify your email",
+      // text: `Your OTP to verify your email is ${otp}`,
+      html: EMAIL_VERIFY_TEMPLATE(otp),
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.json({ success: true, message: "OTP sent successfully" });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
+// Verify email
+export const verifyEmail = async (req, res) => {
+  const { userId, otp } = req.body;
+
+  if (!userId || !otp) {
+    return res.json({ success: false, message: "All fields are required" });
+  }
+
+  try {
+    const user = await userModel.findById(userId);
+
+    if (!user) {
+      return res.json({ success: false, message: "User not found" });
+    }
+
+    if (user.verifyOtp === "" || user.verifyOtp !== otp) {
+      return res.json({ success: false, message: "Invalid OTP" });
+    }
+
+    if (user.verifyOtpExpiresAt < Date.now()) {
+      return res.json({ success: false, message: "OTP expired" });
+    }
+
+    user.isVerified = true;
+    user.verifyOtp = "";
+    user.verifyOtpExpiresAt = 0;
+
+    await user.save();
+
+    res.json({ success: true, message: "Email verified successfully" });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
+// check if user is authenticated
+export const isAuthenticated = async (req, res) => {
+  try {
+    res.json({ success: true, message: "User is authenticated" });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
+// Send reset password email
+export const sendResetOtp = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.json({ success: false, message: "Email is required" });
+  }
+
+  try {
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      return res.json({ success: false, message: "User not found" });
+    }
+
+    const otp = String(Math.floor(100000 + Math.random() * 900000));
+
+    user.resetOtp = otp;
+    user.resetOtpExpiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes
+    await user.save();
+
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: email,
+      subject: "Reset your password",
+      text: `Your OTP to reset your password is ${otp}`,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.json({ success: true, message: "OTP sent successfully" });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+// Reset password
+export const resetPassword = async (req, res) => {
+  const { email, otp, newPassword } = req.body;
+
+  if (!email || !otp || !newPassword) {
+    return res.json({ success: false, message: "All fields are required" });
+  }
+
+  try {
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      return res.json({ success: false, message: "User not found" });
+    }
+
+    if (user.resetOtp === "" || user.resetOtp !== otp) {
+      return res.json({ success: false, message: "Invalid OTP" });
+    }
+
+    if (user.resetOtpExpiresAt < Date.now()) {
+      return res.json({ success: false, message: "OTP expired" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    user.password = hashedPassword;
+    user.resetOtp = "";
+    user.resetOtpExpiresAt = 0;
+
+    await user.save();
+
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: email,
+      subject: "Your password has been reset successfully",
+      text: `Your password has been reset successfully. For additional security, consider changing your password from time to time. If you need more information on account security contact us on ${process.env.SENDER_EMAIL}`,
+    };
+
+    await transporter.sendMail(mailOptions);
+    res.json({
+      success: true,
+      message: "Password has been reset successfully",
+    });
   } catch (error) {
     return res.json({ success: false, message: error.message });
   }
