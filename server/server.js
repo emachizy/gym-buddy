@@ -10,16 +10,20 @@ const app = express();
 const port = process.env.PORT || 4000;
 connectDB();
 
-const allowedOrigins = ["https://gym-buddy-client.onrender.com"];
+const allowedOrigins = ["http://localhost:5173"];
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: allowedOrigins,
-    credentials: true,
+    origin: "https://gym-buddy-client.onrender.com/", // Allow requests from this origin
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allow these HTTP methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
+    credentials: true, // Allow cookies and credentials
   })
 );
+
+app.options("*", cors());
 
 // Api endpoints
 app.get("/", (req, res) => res.send("Api working "));
