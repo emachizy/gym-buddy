@@ -63,7 +63,7 @@ const Login = () => {
         }
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "An error occurred");
+      toast.error(error.response?.data?.message || "An error occurre");
       console.error("Login error: ", error);
     }
   };
