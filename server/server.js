@@ -22,14 +22,8 @@ const allowedOrigins = [
 
 // Configure CORS options
 const corsOptions = {
-  origin: function (origin, callback) {
-    // Check if the request origin is in the allowed list or if it's undefined (e.g., same-origin or non-browser requests)
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-      callback(null, true); // Allow the request
-    } else {
-      callback(new Error("Not allowed by CORS")); // Reject the request
-    }
-  },
+  origin: allowedOrigins,
+  credentials: true, // This allows cookies and credentials to be sent
 };
 
 // Use the CORS middleware with the specified options

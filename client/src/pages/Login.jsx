@@ -40,13 +40,14 @@ const Login = () => {
           setIsLoggedin(true);
           getUserData();
           navigate("/");
+          toast.success(data.message);
         } else {
           toast.error(data.message);
           // console.error("Login error: ", error);
         }
       } else {
         const { data } = await axios.post(
-          `${backendUrl}api/auth/login`,
+          `${backendUrl}/api/auth/login`,
           {
             email,
             password,
@@ -58,6 +59,7 @@ const Login = () => {
           setIsLoggedin(true);
           getUserData();
           navigate("/");
+          toast.success(data.message);
         } else {
           toast.error(data?.message || "An error occurred");
         }
