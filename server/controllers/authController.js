@@ -155,7 +155,7 @@ export const sendVerifyOtp = async (req, res) => {
 // Verify email
 export const verifyEmail = async (req, res) => {
   const { userId, otp } = req.body;
-  console.log(userId);
+  console.log("user", userId);
 
   if (!userId || !otp) {
     return res.json({ success: false, message: "All fields are required" });

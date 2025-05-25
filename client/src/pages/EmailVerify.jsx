@@ -43,7 +43,7 @@ const EmailVerify = () => {
       const otp = optArr.join("");
 
       const { data } = await axios.post(
-        backendUrl + "api/auth/verify-account",
+        backendUrl + "/api/auth/verify-account",
         {
           otp,
         }

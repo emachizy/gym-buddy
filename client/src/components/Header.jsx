@@ -18,7 +18,7 @@ const Header = () => {
         <img
           src={assets.header_bg}
           alt="header image"
-          className="w-36 h-36 rounded-full mb-6"
+          className="w-36 h-36 rounded-full mb-6 object-cover"
           onClick={() => navigate("/")}
         />
         <h1 className="flex items-center gap-2 text-xl sm:text-3xl font-medium">
@@ -31,7 +31,12 @@ const Header = () => {
           Let us start with a quick product tour, and we will have you up and
           running in no time!
         </p>
-        <button className="cursor-pointer border border-gray-500 rounded-full px-8 py-2.5 hover:bg-gray-100 transition-all ">
+        <button
+          onClick={() => {
+            navigate("/login");
+          }}
+          className="cursor-pointer border border-gray-500 rounded-full px-8 py-2.5 hover:bg-gray-100 transition-all "
+        >
           Get Started
         </button>
       </div>
