@@ -1,5 +1,5 @@
 export const EMAIL_VERIFY_TEMPLATE = (
-  otp
+  otp // The OTP will be passed as a parameter here
 ) => `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -157,6 +157,22 @@ export const EMAIL_VERIFY_TEMPLATE = (
       background-color: #414EF9;
     }
 
+    /* OTP specific styles */
+    .otp-code {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 20px 0;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #292E31;
+      letter-spacing: 5px;
+      text-align: center;
+    }
+
+
     /*Media Queries ------------------------------ */
     @media only screen and (max-width: 600px) {
       .email-body_inner,
@@ -176,44 +192,33 @@ export const EMAIL_VERIFY_TEMPLATE = (
     <tr>
       <td align="center">
         <table class="email-content" width="100%" cellpadding="0" cellspacing="0">
-          <!-- Logo -->
           <tr>
             <td class="email-masthead">
               <a class="email-masthead_name">Canvas</a>
             </td>
           </tr>
-          <!-- Email Body -->
           <tr>
             <td class="email-body" width="100%">
               <table class="email-body_inner" align="center" width="570" cellpadding="0" cellspacing="0">
-                <!-- Body content -->
                 <tr>
                   <td class="content-cell">
                     <h1>Verify your email address</h1>
-                    <p>Thanks for signing up for Canvas! We're excited to have you as an early user.</p>
-                    <!-- Action -->
+                    <p>Thanks for signing up for Canvas! Please use the following code to verify your email address:</p>
                     <table class="body-action" align="center" width="100%" cellpadding="0" cellspacing="0">
                       <tr>
                         <td align="center">
-                          <div>
-                            <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{action_url}}" style="height:45px;v-text-anchor:middle;width:200px;" arcsize="7%" stroke="f" fill="t">
-                            <v:fill type="tile" color="#414EF9" />
-                            <w:anchorlock/>
-                            <center style="color:#ffffff;font-family:sans-serif;font-size:15px;">Verify Email</center>
-                          </v:roundrect><![endif]-->
-                            <a href="{{action_url}}" class="button button--blue">Verify Email</a>
+                          <div class="otp-code">
+                            ${otp}
                           </div>
                         </td>
                       </tr>
                     </table>
+                    <p>This code is valid for a limited time. Please enter it on the verification page to complete your registration.</p>
                     <p>Thanks,<br>The Canvas Team</p>
-                    <!-- Sub copy -->
                     <table class="body-sub">
                       <tr>
                         <td>
-                          <p class="sub">If you’re having trouble clicking the button, copy and paste the URL below into your web browser.
-                          </p>
-                          <p class="sub"><a href="{{action_url}}">{{action_url}}</a></p>
+                          <p class="sub">If you did not request this verification, please ignore this email.</p>
                         </td>
                       </tr>
                     </table>

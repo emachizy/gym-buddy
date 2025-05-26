@@ -33,7 +33,8 @@ const Header = () => {
         </p>
         <button
           onClick={() => {
-            navigate("/login");
+            navigate("/profile-setup");
+            window.scrollTo({ top: 0, behavior: "smooth" });
           }}
           className="cursor-pointer border border-gray-500 rounded-full px-8 py-2.5 hover:bg-gray-100 transition-all "
         >
