@@ -17,13 +17,16 @@ app.use(cookieParser());
 // Define allowed origins
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://gym-buddy-client.onrender.com/",
+  "https://gym-buddy-client.onrender.com",
 ];
 
 // Configure CORS options
 const corsOptions = {
   origin: allowedOrigins,
-  credentials: true, // This allows cookies and credentials to be sent
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true, // Allow cookies to be sent with requests
+  optionsSuccessStatus: 200, // For legacy browser support
+  allowedHeaders: ["Content-Type"],
 };
 
 // Use the CORS middleware with the specified options
