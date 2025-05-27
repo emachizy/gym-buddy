@@ -6,11 +6,13 @@ import ResetPassword from "./pages/ResetPassword";
 import { ToastContainer } from "react-toastify";
 import ProfileSetup from "./pages/ProfileSetup";
 import Profile from "./pages/Profile";
+import Navbar from "./components/Navbar";
 
 const App = () => {
   return (
     <div>
       <ToastContainer />
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />

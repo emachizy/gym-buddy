@@ -11,8 +11,11 @@ const Profile = () => {
     axios.defaults.withCredentials = true;
     const fetchProfile = async () => {
       try {
-        const { data } = await axios.get(`${backendUrl}/api/user/profile`);
-        setProfile(data.profile);
+        const { data } = await axios.get(`${backendUrl}/api/user/profile`, {
+          method: "GET",
+          credentials: "include",
+        });
+        setProfile(data.profileData);
         toast.success("Profile fetched successfully!");
       } catch (err) {
         console.error("Error fetching profile:", err);

@@ -10,6 +10,6 @@ const userRouter = express.Router();
 
 userRouter.get("/data", userAuth, getUserData);
 userRouter.post("/setup-profile", userAuth, setupProfile);
-userRouter.get("/profile", userAuth, getProfileData); // Add this lin
+userRouter.get("/profile", userAuth, getProfileData);
 
 export default userRouter;

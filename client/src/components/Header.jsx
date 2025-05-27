@@ -7,7 +7,14 @@ const Header = () => {
   const { userData } = useContext(AppContent);
   const navigate = useNavigate();
 
-  console.log("User Data:", userData);
+  const handleGetStarted = () => {
+    if (!userData) {
+      navigate("/login");
+    } else {
+      navigate("/profile-setup");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
   useEffect(() => {
     console.log("User Data Updated:", userData);
   }, [userData]); // Runs whenever userData changes
@@ -32,10 +39,7 @@ const Header = () => {
           running in no time!
         </p>
         <button
-          onClick={() => {
-            navigate("/profile-setup");
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }}
+          onClick={handleGetStarted}
           className="cursor-pointer border border-gray-500 rounded-full px-8 py-2.5 hover:bg-gray-100 transition-all "
         >
           Get Started

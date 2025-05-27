@@ -57,7 +57,7 @@ export const setupProfile = async (req, res) => {
 export const getProfileData = async (req, res) => {
   try {
     const userId = req.userId; // From middleware
-
+    // console.log("UserID from middleware:", req.userId);
     const user = await userModel
       .findById(userId)
       .select("-password -verifyOtp -resetOtp -__v"); // Exclude sensitive fields
@@ -80,6 +80,7 @@ export const getProfileData = async (req, res) => {
     };
 
     res.json({ success: true, profileData });
+    // console.log("Profile data received:", profileData);
   } catch (error) {
     console.error("Profile fetch error:", error);
     res.status(500).json({ success: false, message: "Server error" });
