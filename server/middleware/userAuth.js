@@ -1,19 +1,13 @@
+import express from "express";
 import jwt from "jsonwebtoken";
 
 const userAuth = async (req, res, next) => {
-  // Try to get token from cookies or Authorization header
-  let token = req.cookies?.token;
+  const { token } = req.cookies;
 
-  if (!token && req.headers.authorization) {
-    // Format: "Bearer <token>"
-    const parts = req.headers.authorization.split(" ");
-    if (parts.length === 2 && parts[0] === "Bearer") {
-      token = parts[1];
-    }
-  }
+  // console.log("Decoded Token:", tokenDecoded);
 
   if (!token) {
-    return res.status(401).json({ success: false, message: "Access denied" });
+    return res.json({ success: false, message: "Access denied" });
   }
 
   try {
@@ -21,12 +15,13 @@ const userAuth = async (req, res, next) => {
 
     if (tokenDecoded) {
       req.userId = tokenDecoded.id;
-      next();
     } else {
-      return res.status(401).json({ success: false, message: "Access denied" });
+      return res.json({ success: false, message: "Access denied" });
     }
+
+    next();
   } catch (error) {
-    return res.status(401).json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
