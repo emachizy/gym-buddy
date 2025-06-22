@@ -17,7 +17,6 @@ app.use(cookieParser());
 // Define allowed origins
 const allowedOrigins = [
   "http://localhost:5173",
-
   "https://gym-buddy-xi.vercel.app",
 ];
 
