@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { assets } from "../assets/assets";
+// import { assets } from "../assets/assets";
 import { IoIosPerson } from "react-icons/io";
 import { CiMail } from "react-icons/ci";
 import { FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
