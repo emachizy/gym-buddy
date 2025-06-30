@@ -12,7 +12,7 @@ const userAuth = async (req, res, next) => {
     const tokenDecoded = jwt.verify(token, process.env.JWT_SECRET);
 
     if (tokenDecoded) {
-      req.body.userId = tokenDecoded.id;
+      req.userId = tokenDecoded.id;
     } else {
       return res.json({ success: false, message: "Access denied" });
     }

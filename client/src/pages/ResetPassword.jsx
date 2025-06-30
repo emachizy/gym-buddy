@@ -46,7 +46,7 @@ function ResetPassword() {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        backendUrl + "api/auth/send-reset-otp",
+        backendUrl + "/api/auth/send-reset-otp",
         { email }
       );
       if (data.success) {
@@ -71,7 +71,7 @@ function ResetPassword() {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        backendUrl + "api/auth/reset-password",
+        backendUrl + "/api/auth/reset-password",
         {
           email,
           otp,

@@ -10,20 +10,27 @@ const app = express();
 const port = process.env.PORT || 4000;
 connectDB();
 
-const allowedOrigins = ["http://localhost:5173"];
+// const allowedOrigins = ["https://gym-buddy-client.onrender.com"];
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(
-  cors({
-    origin: "https://gym-buddy-client.onrender.com/", // Allow requests from this origin
-    methods: ["GET", "POST", "PUT", "DELETE"], // Allow these HTTP methods
-    allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
-    credentials: true, // Allow cookies and credentials
-  })
-);
+// Define allowed origins
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://gym-buddy-xi.vercel.app",
+];
 
-app.options("*", cors());
+// Configure CORS options
+const corsOptions = {
+  origin: allowedOrigins,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true, // Allow cookies to be sent with requests
+  optionsSuccessStatus: 200, // For legacy browser support
+  allowedHeaders: ["Content-Type"],
+};
+
+// Use the CORS middleware with the specified options
+app.use(cors(corsOptions));
 
 // Api endpoints
 app.get("/", (req, res) => res.send("Api working "));

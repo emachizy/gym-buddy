@@ -2,8 +2,7 @@ import { useContext, useState } from "react";
 import { assets } from "../assets/assets";
 import { IoIosPerson } from "react-icons/io";
 import { CiMail } from "react-icons/ci";
-import { FaLock } from "react-icons/fa";
-// import { CgNametag } from "react-icons/cg";
+import { FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -17,17 +16,18 @@ const Login = () => {
   const [state, setState] = useState("Sign Up");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const onSubmitHandler = async (e) => {
     try {
       e.preventDefault();
 
       axios.defaults.withCredentials = true;
+
       if (state === "Sign Up") {
         const { data } = await axios.post(
-          `${backendUrl}api/auth/register`,
+          `${backendUrl}/api/auth/register`,
           {
             name,
             email,
@@ -40,13 +40,13 @@ const Login = () => {
           setIsLoggedin(true);
           getUserData();
           navigate("/");
+          toast.success(data.message);
         } else {
           toast.error(data.message);
-          // console.error("Login error: ", error);
         }
       } else {
         const { data } = await axios.post(
-          `${backendUrl}api/auth/login`,
+          `${backendUrl}/api/auth/login`,
           {
             email,
             password,
@@ -58,6 +58,7 @@ const Login = () => {
           setIsLoggedin(true);
           getUserData();
           navigate("/");
+          toast.success(data.message);
         } else {
           toast.error(data?.message || "An error occurred");
         }
@@ -88,7 +89,7 @@ const Login = () => {
         <form onSubmit={onSubmitHandler}>
           {state === "Sign Up" && (
             <div className="flex items-center w-full px-5 py-2.5 rounded-full bg-[#333a5c] mb-4 gap-3">
-              <IoIosPerson className="text-" />
+              <IoIosPerson />
               <input
                 onChange={(e) => setName(e.target.value)}
                 value={name}
@@ -97,13 +98,13 @@ const Login = () => {
                 id="fullName"
                 placeholder="Full Name"
                 required
-                className="bg-transparent focus:outline-none text-white"
+                className="bg-transparent focus:outline-none text-white w-full"
               />
             </div>
           )}
 
           <div className="flex items-center w-full px-5 py-2.5 rounded-full bg-[#333a5c] mb-4 gap-3">
-            <CiMail className="text-" />
+            <CiMail />
             <input
               onChange={(e) => setEmail(e.target.value)}
               value={email}
@@ -112,29 +113,38 @@ const Login = () => {
               id="email"
               placeholder="Enter email"
               required
-              className="bg-transparent focus:outline-none text-white"
+              className="bg-transparent focus:outline-none text-white w-full"
             />
           </div>
 
-          <div className="flex items-center w-full px-5 py-2.5 rounded-full bg-[#333a5c] mb-4 gap-3">
+          {/* Password Field with Show/Hide */}
+          <div className="relative flex items-center w-full px-5 py-2.5 rounded-full bg-[#333a5c] mb-4 gap-3">
             <FaLock />
             <input
               onChange={(e) => setPassword(e.target.value)}
               value={password}
-              type="password"
+              type={showPassword ? "text" : "password"}
               name="password"
               id="password"
               placeholder="Enter password"
               required
-              className="bg-transparent focus:outline-none text-white"
+              className="bg-transparent focus:outline-none text-white w-full pr-8"
             />
+            <div
+              className="absolute right-5 cursor-pointer text-white"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </div>
           </div>
+
           <p
             onClick={() => navigate("/reset-password")}
             className="cursor-pointer mb-4 text-indigo-500"
           >
             forgot password?
           </p>
+
           <button className="w-full py-2.5 rounded-full bg-gradient-to-r from-red-500 to-blue-900 font-medium text-white cursor-pointer">
             {state}
           </button>

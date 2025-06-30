@@ -15,7 +15,7 @@ const Navbar = () => {
       axios.defaults.withCredentials = true;
 
       const { data } = await axios.post(
-        `${backendUrl}api/auth/send-verify-otp`
+        `${backendUrl}/api/auth/send-verify-otp`
       );
       if (data.success) {
         navigate("/email-verify");
@@ -31,17 +31,23 @@ const Navbar = () => {
   const logout = async () => {
     try {
       axios.defaults.withCredentials = true;
-      const { data } = await axios.post(`${backendUrl}api/auth/logout`);
+      const { data } = await axios.post(`${backendUrl}/api/auth/logout`);
       data.success ? setIsLoggedin(false) : console.error(data.message);
       data.success ? setUserData(null) : console.error(data.message);
       navigate("/");
+      toast.success(data.message);
     } catch (error) {
       toast.error(error.response?.data?.message || "An error occurred");
     }
   };
   return (
     <div className="w-full flex justify-between items-center p-4 sm:p-6 sm:px-24 absolute top-0">
-      <img src={assets.logo} alt="" className="w-28 sm:w-32" />
+      <img
+        onClick={() => navigate("/")}
+        src={assets.logo}
+        alt=""
+        className="w-28 sm:w-32 cursor-pointer"
+      />
 
       {userData ? (
         <div className="w-8 h-8 flex justify-center items-center gap-4 rounded-full bg-black text-white relative cursor-pointer group">
