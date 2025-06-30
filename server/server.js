@@ -17,7 +17,7 @@ app.use(cookieParser());
 // Define allowed origins
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://gym-buddy-xi.vercel.app",
+  "https://gym-buddy-client.onrender.com",
 ];
 
 // Configure CORS options
