@@ -55,6 +55,8 @@ const Login = () => {
         );
 
         if (data.success) {
+          console.log("Login successful:", data);
+
           setIsLoggedin(true);
           getUserData();
           navigate("/");

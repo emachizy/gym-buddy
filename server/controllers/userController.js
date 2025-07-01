@@ -22,17 +22,12 @@ export const getUserData = async (req, res) => {
 
 export const setupProfile = async (req, res) => {
   try {
-    const { userId, fitnessGoal, preferredTime, availability, location } =
-      req.body;
+    const userId = req.userId; // Get from middleware
+    const { fitnessGoal, preferredTime, availability, location } = req.body;
 
     const user = await userModel.findByIdAndUpdate(
       userId,
-      {
-        fitnessGoal,
-        preferredTime,
-        availability,
-        location,
-      },
+      { fitnessGoal, preferredTime, availability, location },
       { new: true }
     );
 
