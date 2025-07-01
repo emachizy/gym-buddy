@@ -75,7 +75,7 @@ const EmailVerify = () => {
         onClick={() => navigate("/")}
         src={assets.logo}
         alt="logo"
-        className="absolute left-5 sm:left-20 top-5 w-28 sm:cursor-pointer"
+        className="absolute left-5 sm:left-20 top-5 w-28 sm:cursor-pointer hidden"
       />
       <form
         onSubmit={onSubmitHandler}
