@@ -21,7 +21,7 @@ const Navbar = () => {
         navigate("/email-verify");
         toast.success(data.message);
       } else {
-        toast.error(data.message);
+        toast.error("Verification failed. Please try again.");
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "An error occurred");
@@ -54,7 +54,7 @@ const Navbar = () => {
           {userData.name[0].toUpperCase()}
           <div className="absolute hidden group-hover:block top-0 right-0 z-10 text-black rounded pt-10">
             <ul className="list-none m-0 p-2 bg-gray-100 text-sm">
-              {userData?.isVerified === false && (
+              {userData && userData.isVerified === false && (
                 <li
                   onClick={sendVerificationOtp}
                   className="py-1 px-2 hover:bg-gray-200 cursor-pointer"
@@ -62,6 +62,12 @@ const Navbar = () => {
                   Verify email
                 </li>
               )}
+              <li
+                onClick={() => navigate("/profile")}
+                className="py-1 px-2 hover:bg-gray-200 cursor-pointer"
+              >
+                Profile
+              </li>
 
               <li
                 onClick={logout}

@@ -2,10 +2,13 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { AppContent } from "../context/AppContext";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const { backendUrl } = useContext(AppContent);
   const [profile, setProfile] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.defaults.withCredentials = true;
@@ -52,6 +55,14 @@ const Profile = () => {
           {profile.location?.coordinates
             ? `${profile.location.coordinates[1]}, ${profile.location.coordinates[0]}`
             : "Not set"}
+        </div>
+        <div>
+          <button
+            className="mt-4 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            onClick={() => navigate("/profile-setup")}
+          >
+            Edit Profile
+          </button>
         </div>
       </div>
     </div>

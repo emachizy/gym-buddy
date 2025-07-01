@@ -122,33 +122,35 @@ export const logout = async (req, res) => {
 // Generate OTP
 export const sendVerifyOtp = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const userId = req.userId; // Get from middleware
 
     const user = await userModel.findById(userId);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
 
     if (user.isVerified) {
       return res.json({ success: false, message: "User is already verified" });
     }
 
     const otp = String(Math.floor(100000 + Math.random() * 900000));
-
     user.verifyOtp = otp;
-    user.verifyOtpExpiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes
+    user.verifyOtpExpiresAt = Date.now() + 10 * 60 * 1000;
     await user.save();
 
     const mailOptions = {
       from: process.env.SENDER_EMAIL,
       to: user.email,
       subject: "Verify your email",
-      // text: `Your OTP to verify your email is ${otp}`,
       html: EMAIL_VERIFY_TEMPLATE(otp),
     };
 
     await transporter.sendMail(mailOptions);
-
     res.json({ success: true, message: "OTP sent successfully" });
   } catch (error) {
-    res.json({ success: false, message: error.message });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
