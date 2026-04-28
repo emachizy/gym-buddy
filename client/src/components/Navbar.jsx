@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { assets } from "../assets/assets";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AppContent } from "../context/AppContext";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -48,6 +48,8 @@ const Navbar = () => {
         alt=""
         className="w-28 sm:w-32 cursor-pointer"
       />
+
+      <Link to="/find-gym">Find Gym</Link>
 
       {userData ? (
         <div className="w-8 h-8 flex justify-center items-center gap-4 rounded-full bg-black text-white relative cursor-pointer group">

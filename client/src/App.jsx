@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import ProfileSetup from "./pages/ProfileSetup";
 import Profile from "./pages/Profile";
 import Navbar from "./components/Navbar";
+import FindGym from "./pages/FindGym";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="profile-setup" element={<ProfileSetup />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/find-gym" element={<FindGym />} />
       </Routes>
     </div>
   );
